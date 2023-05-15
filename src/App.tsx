@@ -1,20 +1,28 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, Suspense } from "react";
 import "./App.css";
 import { ProfileProps, ProfileStat } from "./components/Profile";
 import { ProfileList } from "./components/ProfileList";
 import { SearchForm } from "./components/SearchForm";
 import { Form } from "./components/Form";
+import { HOF } from "./components/HOF";
+import { Timer } from "./components/Timer";
+import { UserList } from "./components/UserList";
+import { Route, Routes } from "react-router-dom";
+import { NotFound } from "./components/NotFound";
 
 const mockStats: ProfileStat[] = [
   {
+    _id: "stat-like",
     text: "likes",
     count: 3,
   },
   {
+    _id: "stat-posts",
     text: "posts",
     count: 10,
   },
   {
+    _id: "stat-shared",
     text: "shared",
     count: 5,
   },
@@ -29,8 +37,8 @@ const mockStats: ProfileStat[] = [
 //   stats: mockStats,
 // };
 
-
-const generateRandomID = () => `123-${Math.floor(Math.random() * 100000)}`;
+export const generateRandomID = () =>
+  `123-${Math.floor(Math.random() * 100000)}`;
 
 const mockProfileList: ProfileProps[] = [
   {
@@ -76,35 +84,51 @@ function App() {
 
   const filterListByName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(searchTerm.length < 3) {
-      alert('Minimum 3 znaki!');
+    if (searchTerm.length < 3) {
+      alert("Minimum 3 znaki!");
       return;
     }
 
     setFilteredList(
       list.filter(({ username }) => username.includes(searchTerm))
     );
-    setSearchTerm('');
-  }
+    setSearchTerm("");
+  };
 
   const resetList = () => {
     setFilteredList([]);
-    setSearchTerm('');
-  }
+    setSearchTerm("");
+  };
 
-  const deleteUser = (id: string) => setList(prev => prev.filter(({_id}) => _id !== id));
+  const deleteUser = (id?: string) =>
+    setList((prev) => prev.filter(({ _id }) => _id !== id));
+
+  const addUser = (user: ProfileProps) => setList((prev) => [...prev, user]);
 
   return (
     <div className="App">
-      <Form />
-      {/* <SearchForm
-        searchTerm={searchTerm}
-        handleSearch={handleSearch}
-        filterListByName={filterListByName}
-        resetList={resetList}
-      />
-      <h2>Wyszukiwana fraza: {searchTerm}</h2>
-      <ProfileList list={list} filteredList={filteredList} deleteUser={deleteUser}/> */}
+      <Routes>
+        <Route path="/" element={<UserList />} />
+        <Route
+          path="form"
+          element={
+            <SearchForm
+              searchTerm={searchTerm}
+              handleSearch={handleSearch}
+              filterListByName={filterListByName}
+              resetList={resetList}
+            />
+          }
+        />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+
+      {/* <h2>Wyszukiwana fraza: {searchTerm}</h2>
+      <ProfileList list={list} filteredList={filteredList} deleteUser={deleteUser}/>
+      <Form addUser={addUser}/>
+      <HOF /> */}
+      {/* <Timer /> */}
+      {/* <UserList /> */}
     </div>
   );
 }

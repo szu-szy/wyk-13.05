@@ -2,19 +2,20 @@ import './Profile.scss';
 import { useState } from "react";
 
 export type ProfileStat = {
+  _id: string;
   text: string;
   count: number;
 };
 
 export type ProfileProps = {
-  _id: string;
+  _id?: string;
   username: string;
   tag: string;
   location: string;
   phone: string;
   avatar?: string;
   stats: ProfileStat[];
-  deleteUser: (id: string) => void;
+  deleteUser: (id?: string) => void;
 };
 
 export const Profile = ({
