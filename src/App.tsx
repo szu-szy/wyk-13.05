@@ -9,7 +9,7 @@ export const generateRandomID = () =>
   `123-${Math.floor(Math.random() * 100000)}`;
 
 export type Product = {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   price: number;

@@ -21,20 +21,14 @@ ZADANIE 1 - 20.05
 - jezeli isReadOnly === false to mamy mozliwosc edycji naszego produktu
 - przycisk save aktualizuje produkt w bazie
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-3. Utwórz Formularz do tworzenia produktów
+4. Napisac logike w funkcji handleSave i handleDelete na bazie id pobranego z url
+5. Utwórz Formularz do edycji produktu 
+- stworz handler do aktualizowania wartosci produktu (patrz components/Form/index.tsx => handleChange) https://github.com/szu-szy/wyk-13.05
+- po wcisnieciu przycisku zapisz w formularzu, wykona sie event onSubmit -> handleSave
+- wynikiem koncowym bedzie wypisanie zaktualizowanego produktu w konsoli
+- sprobuj ustawic produkt otrzymany z serwera jako stan dzieki setProduct
+- jezeli sie uda to isReadOnly ustawamy na true
+6. Utwórz Formularz do tworzenia produktów
 - zawiera wszystkie pola do uzupelnienia z API product
 - przycisk submit tworzy nam nowy produkt i dodaje do listy produktów
 - formularz zawiera walidacje po stronie serwera (w funkcji odpowiedzialnej za wyslanie zapytania do serwera oraz w strukturze JSX)

@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Product as ProductType } from "../../App";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 export const Product = () => {
-  const [product, setProduct] = useState<ProductType>();
+  const [product, setProduct] = useState<ProductType>({
+    title: "",
+    description: "",
+    price: 0,
+    brand: "",
+    category: "",
+    thumbnail: "",
+    images: [],
+  });
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
@@ -23,19 +31,39 @@ export const Product = () => {
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setProduct((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
   const handleEdit = () => setIsReadOnly((prev) => !prev);
-  const handleSave = async () => {
-    try {
-      const res = await fetch(`https://dummyjson.com/products/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product),
-      });
-      const data = await res.json();
-      if (!res.ok) throw Error("Response is undefined");
-      navigate("/products");
-    } catch (e) {
-      console.log(e);
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(id) {
+      try {
+        const {
+          title, description, price, brand, category
+        } = product
+        const res = await fetch(`https://dummyjson.com/products/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title,
+            description,
+            price,
+            brand,
+            category
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw Error("Response is undefined");
+        setProduct(data);
+        setIsReadOnly(true);
+        alert("Pomyślnie zaktualizowano!");
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -67,7 +95,7 @@ export const Product = () => {
       </nav>
       {isReadOnly ? (
         <>
-         <button onClick={handleEdit}>Edytuj</button>
+          <button onClick={handleEdit}>Edytuj</button>
           <h1>{`${product.title}: ${product.price}`}</h1>
           <h2>{product.brand}</h2>
           <span>Kategoria: {product.category}</span>
@@ -77,14 +105,66 @@ export const Product = () => {
         <>
           <ul>
             <li>
-              <button onClick={handleSave}>Zapisz</button>
-            </li>
-            <li>
               <button onClick={handleDelete}>Usun</button>
             </li>
           </ul>
           <h2>Edytuj produkt {product.title}</h2>
           <form onSubmit={handleSave}>
+            <div>
+              <label htmlFor="title">
+                Tytul:
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="description">
+                Opis:
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="price">
+                Cena:
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="brand">
+                Firma:
+                <input
+                  type="text"
+                  id="brand"
+                  name="brand"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="category">
+                Kategoria:
+                <input
+                  type="text"
+                  id="category"
+                  name="category"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
             <button type="submit">Zapisz</button>
           </form>
         </>
