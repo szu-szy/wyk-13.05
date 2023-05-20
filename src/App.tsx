@@ -17,7 +17,7 @@ export type Product = {
   category: string;
   thumbnail: string;
   images: string[];
-}
+};
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,14 +25,31 @@ function App() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`https://dummyjson.com/products?limit=${PRODUCTS_LIMIT}`);
+      const response = await fetch(
+        `https://dummyjson.com/products?limit=${PRODUCTS_LIMIT}`
+      );
       const { products } = await response.json();
-      if(!response.ok) throw Error('Something wwrong with response!');
+      if (!response.ok) throw Error("Something wwrong with response!");
       setProducts(products);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const handleSearchList = async (searchTerm: string) => {
+    if (searchTerm.length > 0) {
+      try {
+        const response = await fetch(
+          `https://dummyjson.com/products/search?q=${searchTerm}`
+        );
+        const { products } = await response.json();
+        if (!response.ok) throw Error("Something wwrong with response!");
+        setProducts(products);
+      } catch (error) {
+        console.log(error);
+      }
+    } else fetchProducts();
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -41,11 +58,15 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path="/products" element={<ProductsList list={products} />} />
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/products"
+          element={
+            <ProductsList list={products} handleSearchList={handleSearchList} />
+          }
+        />
         <Route path="/products/:id" element={<Product />} />
       </Routes>
-      
     </div>
   );
 }

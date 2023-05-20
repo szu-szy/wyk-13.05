@@ -28,8 +28,14 @@ ZADANIE 1 - 20.05
 - wynikiem koncowym bedzie wypisanie zaktualizowanego produktu w konsoli
 - sprobuj ustawic produkt otrzymany z serwera jako stan dzieki setProduct
 - jezeli sie uda to isReadOnly ustawamy na true
-6. Utwórz Formularz do tworzenia produktów
-- zawiera wszystkie pola do uzupelnienia z API product
+6. Stwórz komponent SearchForm który otrzymuje jako props searchTerm oraz funkcje do ustawiania searchTerm
+- po wcisnieciu przycisku search powinno pobrac liste przefiltrowanych danych po tytule
+- do uzycia Endpoint Search product 
+- https://dummyjson.com/products/search?q=${searchTerm}
+7. Utwórz Formularz do tworzenia produktów
+- zawiera wszystkie pola do uzupelnienia z API product (https://dummyjson.com/docs/products)
 - przycisk submit tworzy nam nowy produkt i dodaje do listy produktów
-- formularz zawiera walidacje po stronie serwera (w funkcji odpowiedzialnej za wyslanie zapytania do serwera oraz w strukturze JSX)
-4. Utwórz formularz który filtruje nam produkty po nazwie
+- po storzeniu produktu przenosi nas do listy produktów
+- formularz zawiera walidacje po stronie klienta (w funkcji odpowiedzialnej za wyslanie zapytania do serwera oraz w strukturze JSX)
+- jezeli nie spelnia warunków walidacji to wyskakuje alert dla uzytkownika
+- dodajemy do routingu nowa sciezke o nazwie /products/new i przekazujemy tam komponent naszego ProductForm
