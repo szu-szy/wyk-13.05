@@ -1,134 +1,51 @@
-import { useState, ChangeEvent, FormEvent, Suspense } from "react";
-import "./App.css";
-import { ProfileProps, ProfileStat } from "./components/Profile";
-import { ProfileList } from "./components/ProfileList";
-import { SearchForm } from "./components/SearchForm";
-import { Form } from "./components/Form";
-import { HOF } from "./components/HOF";
-import { Timer } from "./components/Timer";
-import { UserList } from "./components/UserList";
-import { Route, Routes } from "react-router-dom";
-import { NotFound } from "./components/NotFound";
-
-const mockStats: ProfileStat[] = [
-  {
-    _id: "stat-like",
-    text: "likes",
-    count: 3,
-  },
-  {
-    _id: "stat-posts",
-    text: "posts",
-    count: 10,
-  },
-  {
-    _id: "stat-shared",
-    text: "shared",
-    count: 5,
-  },
-];
-
-// const mockProfile: ProfileProps = {
-//   username: "Jan",
-//   tag: "Janek123",
-//   location: "Białystok",
-//   phone: "+48123123123",
-//   avatar: "https://www.w3schools.com/howto/img_avatar.png",
-//   stats: mockStats,
-// };
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import "./App.scss";
+import { ProductsList } from "./components/ProductsList";
+import { Route, Router, Routes } from "react-router-dom";
+import { Home } from "./components/Home";
+import { Product } from "./components/Product";
 
 export const generateRandomID = () =>
   `123-${Math.floor(Math.random() * 100000)}`;
 
-const mockProfileList: ProfileProps[] = [
-  {
-    _id: generateRandomID(),
-    username: "Jan",
-    tag: "Janek123",
-    location: "Białystok",
-    phone: "+48123123123",
-    avatar: "https://www.w3schools.com/howto/img_avatar.png",
-    stats: mockStats,
-    deleteUser: () => {},
-  },
-  {
-    _id: generateRandomID(),
-    username: "Andrzej",
-    tag: "Andrzejek123",
-    location: "Warszawa",
-    phone: "+48111111111",
-    avatar:
-      "https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg",
-    stats: mockStats,
-    deleteUser: () => {},
-  },
-  {
-    _id: generateRandomID(),
-    username: "Pawel",
-    tag: "Pablo123",
-    location: "Gniezno",
-    phone: "+48123000111",
-    avatar: "https://www.blexar.com/avatar.png",
-    stats: mockStats,
-    deleteUser: () => {},
-  },
-];
+export type Product = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
+}
 
 function App() {
-  const [list, setList] = useState<ProfileProps[]>(mockProfileList);
-  const [filteredList, setFilteredList] = useState<ProfileProps[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const PRODUCTS_LIMIT = 20;
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) =>
-    setSearchTerm(e.target.value);
-
-  const filterListByName = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (searchTerm.length < 3) {
-      alert("Minimum 3 znaki!");
-      return;
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`https://dummyjson.com/products?limit=${PRODUCTS_LIMIT}`);
+      const { products } = await response.json();
+      if(!response.ok) throw Error('Something wwrong with response!');
+      setProducts(products);
+    } catch(error) {
+      console.log(error);
     }
+  }
 
-    setFilteredList(
-      list.filter(({ username }) => username.includes(searchTerm))
-    );
-    setSearchTerm("");
-  };
-
-  const resetList = () => {
-    setFilteredList([]);
-    setSearchTerm("");
-  };
-
-  const deleteUser = (id?: string) =>
-    setList((prev) => prev.filter(({ _id }) => _id !== id));
-
-  const addUser = (user: ProfileProps) => setList((prev) => [...prev, user]);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<UserList />} />
-        <Route
-          path="form"
-          element={
-            <SearchForm
-              searchTerm={searchTerm}
-              handleSearch={handleSearch}
-              filterListByName={filterListByName}
-              resetList={resetList}
-            />
-          }
-        />
-        <Route path='*' element={<NotFound />} />
+        <Route path="/" element={<Home />}/>
+        <Route path="/products" element={<ProductsList list={products} />} />
+        <Route path="/products/:id" element={<Product />} />
       </Routes>
-
-      {/* <h2>Wyszukiwana fraza: {searchTerm}</h2>
-      <ProfileList list={list} filteredList={filteredList} deleteUser={deleteUser}/>
-      <Form addUser={addUser}/>
-      <HOF /> */}
-      {/* <Timer /> */}
-      {/* <UserList /> */}
+      
     </div>
   );
 }

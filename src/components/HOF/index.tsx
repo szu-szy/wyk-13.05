@@ -19,10 +19,10 @@ export const HOF = () => {
   ) => fn(firstValue, secondValue);
 
   useEffect(() => {
-    console.log(operation(sum, 1,2));
-    console.log(operation(sub, 1,2));
-    console.log(operation(multiply, 1,2));
-    console.log(operation(divide, 1, 0));
+    // console.log(operation(sum, 1,2));
+    // console.log(operation(sub, 1,2));
+    // console.log(operation(multiply, 1,2));
+    // console.log(operation(divide, 1, 1));
   }, []);
 
   return null;
