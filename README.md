@@ -39,3 +39,63 @@ ZADANIE 1 - 20.05
 - formularz zawiera walidacje po stronie klienta (w funkcji odpowiedzialnej za wyslanie zapytania do serwera oraz w strukturze JSX)
 - jezeli nie spelnia warunków walidacji to wyskakuje alert dla uzytkownika
 - dodajemy do routingu nowa sciezke o nazwie /products/new i przekazujemy tam komponent naszego ProductForm
+
+Wykład 21.05
+
+## Zadanko 1
+- stwórz własnego hooka z logiką dla komponentu Product
+
+## Zadanie 2
+- stwórz hooka dla App.tsx (src>hooks>useApp.ts)
+- stwórz typ zwracanego obiektu w hooku
+- przenies tam cala logike z App.tsx
+
+
+## Zadanie 3
+- stwórz formularz do rejestracji
+- funkcje register przystosuj do formularza
+- walidacja - haslo minimum 6 znaków
+- efekt koncowy to dodanie uzytkownika do firebase
+
+## Zadanie 4
+- stwwórz formularz do logowania
+- funkcje login przystosuj do formularza
+- walidacja - hasło minimum 6 znaków
+- informacja dla uzytkownika o pomyslnym zalogowaniu + log w konsoli
+
+## Zadanie końcowe 
+# Konfiguracja projektu
+- Stwórz puste repozytorium na github
+- Sklonuj je lokalnie za pomoca git clone
+- Stwórz w pobranym repozytorium pusty projekt React
+- komenda: npx create-react-app my-app --template typescript
+- po zainstalowaniu dodaj paczki:
+- node-sass
+- firebase
+- react-router-dom
+
+# Konfiguracja Firebase
+- stwórz nowy projekt wraz z aplikacją
+- dodaj plik do folderu src > firebaseConfig.ts
+- w komponencie App zainicjuj aplikacje:
+- const app = initializeApp(firebaseConfig);
+
+# Stwórz routing aplikacji (kazda strona ma inny header)
+- homepage "/" 
+- lista postów "/posts"
+- strona pojedynczego posta "/posts/:id"
+- strona do rejestracji użytkownika "/register"
+- strona do logowania "/login"
+- strona do formularza który tworzy nowy post "/posts/new"
+
+# Komponenty
+- App - zawiera liste postów i przekazuje ją nizej
+- Lista postów - wyswietla posty
+- Pojedyńczy post + formularz do edycji - wyswietla post i edytuje oraz usuwa
+- Formularz do stworzenia postu - tworzy nowy post
+- Formularz do logowania - loguje do firebase
+- Formularz do rejestracji - tworzy uzytkownika w firebase
+
+# Dodatkowe uwagi
+- logika wydziela w hookach
+- lekkie wystylowanie wszystkich komponentów

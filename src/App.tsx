@@ -1,9 +1,14 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.scss";
 import { ProductsList } from "./components/ProductsList";
 import { Route, Router, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Product } from "./components/Product";
+import { ProductForm } from "./components/ProductForm";
+import { Registration } from "./components/Registration";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebaseConfig";
+import { Login } from "./components/Login";
 
 export const generateRandomID = () =>
   `123-${Math.floor(Math.random() * 100000)}`;
@@ -15,13 +20,14 @@ export type Product = {
   price: number;
   brand: string;
   category: string;
-  thumbnail: string;
-  images: string[];
+  thumbnail?: string;
+  images?: string[];
 };
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const PRODUCTS_LIMIT = 20;
+  const app = initializeApp(firebaseConfig);
 
   const fetchProducts = async () => {
     try {
@@ -66,6 +72,9 @@ function App() {
           }
         />
         <Route path="/products/:id" element={<Product />} />
+        <Route path="/products/new" element={<ProductForm />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
